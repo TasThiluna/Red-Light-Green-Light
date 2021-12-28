@@ -4,8 +4,6 @@ using System;
 using System.IO;
 using UnityEngine;
 
-#pragma warning disable RCS1128
-
 class modConfig<T> where T : new()
 {
     public modConfig(string filename, Action<Exception> onRead = null)

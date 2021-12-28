@@ -12,6 +12,7 @@ public class redLightGreenLight : MonoBehaviour
     public new KMAudio audio;
     public KMBombInfo bomb;
     public KMBombModule module;
+    public KMBossModule boss;
 
     public Transform moduleTransform;
     public GameObject statusLight;
@@ -25,6 +26,8 @@ public class redLightGreenLight : MonoBehaviour
     private Vector3 mousePos;
     private bool alreadyStruck;
 
+    public static string[] ignoreList = null;
+    private int solvesNeeded;
     private static int moduleIdCounter = 1;
     private int moduleId;
     private bool moduleSolved;
@@ -81,10 +84,66 @@ public class redLightGreenLight : MonoBehaviour
                 Settings.HardMode = values[0];
             }
         }
+        ignoreList = boss.GetIgnoredModules("Red Light Green Light", new string[]
+        {
+            "14",
+            "42",
+            "501",
+            "A>N<D",
+            "Bamboozling Time Keeper",
+            "Black Arrows",
+            "Brainf---",
+            "Busy Beaver",
+            "Concentration",
+            "Duck Konundrum",
+            "Don't Touch Anything",
+            "Floor Lights",
+            "Forget Any Color",
+            "Forget Enigma",
+            "Forget Everything",
+            "Forget Infinity",
+            "Forget It Not",
+            "Forget Maze Not",
+            "Forget Me Later",
+            "Forget Me Not",
+            "Forget Our Voices",
+            "Forget Perspective",
+            "Forget The Colors",
+            "Forget Them All",
+            "Forget This",
+            "Forget Us Not",
+            "ID Exchange",
+            "Iconic",
+            "Keypad Directionality",
+            "Kugelblitz",
+            "Multitask",
+            "OmegaDestroyer",
+            "OmegaForest",
+            "Organization",
+            "Password Destroyer",
+            "Purgatory",
+            "RPS Judging",
+            "Security Council",
+            "Shoddy Chess",
+            "Simon Forgets",
+            "Simon's Stages",
+            "Souvenir",
+            "Tallordered Keys",
+            "The Time Keeper",
+            "Timing is Everything",
+            "The Troll",
+            "Turn The Key",
+            "The Twin",
+            "Übermodule",
+            "Ultimate Custom Night",
+            "The Very Annoying Button",
+            "Whiteout"
+        });
     }
 
     private void Start()
     {
+        solvesNeeded = bomb.GetSolvableModuleNames().Count() - bomb.GetSolvableModuleNames().Count(x => ignoreList.Contains(x));
         activationCount = Mathf.CeilToInt((float)bomb.GetModuleNames().Count() / 5f);
         Debug.LogFormat("[Red Light Green Light #{0}] The module count is {1}, so there will be {2} activation{3}.", moduleId, bomb.GetModuleNames().Count(), activationCount, activationCount != 1 ? "s" : "");
     }
@@ -124,6 +183,14 @@ public class redLightGreenLight : MonoBehaviour
             module.HandlePass();
             moduleSolved = true;
             Debug.LogFormat("[Red Light Green Light #{0}] {1} activations have been completed. Module solved!", moduleId, totalActivations);
+            eyes[0].material.mainTexture = eyeTextures[2];
+            solveText.text = "GG";
+        }
+        if (bomb.GetSolvedModuleNames().Count() == solvesNeeded)
+        {
+            module.HandlePass();
+            moduleSolved = true;
+            Debug.LogFormat("[Red Light Green Light #{0}] Every other module has been solved. Module solved!", moduleId);
             eyes[0].material.mainTexture = eyeTextures[2];
             solveText.text = "GG";
         }
