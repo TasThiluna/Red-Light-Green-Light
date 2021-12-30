@@ -84,7 +84,7 @@ public class redLightGreenLight : MonoBehaviour
                 Settings.HardMode = values[0];
             }
         }
-        ignoreList = boss.GetIgnoredModules("Red Light Green Light", new string[]
+        ignoreList = ignoreList ?? boss.GetIgnoredModules("Red Light Green Light", new string[]
         {
             "14",
             "42",
@@ -143,7 +143,8 @@ public class redLightGreenLight : MonoBehaviour
 
     private void Start()
     {
-        solvesNeeded = bomb.GetSolvableModuleNames().Count() - bomb.GetSolvableModuleNames().Count(x => ignoreList.Contains(x));
+        solvesNeeded = bomb.GetSolvableModuleNames().Where(str => !ignoreList.Contains(str)).Count();
+        Debug.LogFormat("<Red Light Green Light #{0}> {1}", moduleId, solvesNeeded);
         activationCount = Mathf.CeilToInt((float)bomb.GetModuleNames().Count() / 5f);
         Debug.LogFormat("[Red Light Green Light #{0}] The module count is {1}, so there will be {2} activation{3}.", moduleId, bomb.GetModuleNames().Count(), activationCount, activationCount != 1 ? "s" : "");
     }
