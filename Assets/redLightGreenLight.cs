@@ -183,7 +183,7 @@ public class redLightGreenLight : MonoBehaviour
         {
             module.HandlePass();
             moduleSolved = true;
-            Debug.LogFormat("[Red Light Green Light #{0}] {1} activations have been completed. Module solved!", moduleId, totalActivations);
+            Debug.LogFormat("[Red Light Green Light #{0}] {1} activation{2} been completed. Module solved!", moduleId, totalActivations, totalActivations > 1 ? "s have" : " has");
             eyes[0].material.mainTexture = eyeTextures[2];
             solveText.text = "GG";
         }
