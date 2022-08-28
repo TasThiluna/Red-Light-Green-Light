@@ -36,6 +36,7 @@ public class redLightGreenLight : MonoBehaviour
     public KMGameCommands service;
     private bool bombExploded;
     redLightGreenLightSettings Settings = new redLightGreenLightSettings();
+#pragma warning disable 414
     private static Dictionary<string, object>[] TweaksEditorSettings = new Dictionary<string, object>[]
     {
       new Dictionary<string, object>
@@ -52,6 +53,7 @@ public class redLightGreenLight : MonoBehaviour
         }}
       }
     };
+#pragma warning restore 414
 
     private class redLightGreenLightSettings
     {
@@ -231,7 +233,7 @@ public class redLightGreenLight : MonoBehaviour
         while (!bombExploded)
         {
             yield return new WaitForSeconds(.01f);
-            service.CauseStrike("그만 움직여");
+            service.CauseStrike(string.Format("Player {0}, eliminated.", moduleIdCounter));
         }
     }
 }
