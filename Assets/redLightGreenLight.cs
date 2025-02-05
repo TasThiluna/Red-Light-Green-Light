@@ -26,6 +26,8 @@ public class redLightGreenLight : MonoBehaviour
     private Vector3 mousePos;
     private bool alreadyStruck;
 
+    private IDictionary<string, object> tpAPI;
+
     public static string[] ignoreList = null;
     private int solvesNeeded;
     private static int moduleIdCounter = 1;
@@ -65,7 +67,14 @@ public class redLightGreenLight : MonoBehaviour
     {
         moduleId = moduleIdCounter++;
         statusLight.gameObject.SetActive(false);
-        module.OnActivate += delegate () { audio.PlaySoundAtTransform("start", transform); StartCoroutine(Timer()); };
+        module.OnActivate += delegate ()
+        {
+            GameObject tpAPIGameObject = GameObject.Find("TwitchPlays_Info");
+            if (tpAPIGameObject != null)
+                tpAPI = tpAPIGameObject.GetComponent<IDictionary<string, object>>();
+            audio.PlaySoundAtTransform("start", transform);
+            StartCoroutine(Timer());
+        };
         bomb.OnBombExploded += delegate () { bombExploded = true; };
         eyes[0].material.mainTexture = eyeTextures[1];
         eyes[1].material.mainTexture = eyeTextures[0];
@@ -159,6 +168,8 @@ public class redLightGreenLight : MonoBehaviour
 
     private IEnumerator Activate()
     {
+        if (tpAPI != null)
+            tpAPI["ircConnectionSendMessage"] = "무궁화 꽃 이 피었 습니다";
         audio.PlaySoundAtTransform("voice", transform);
         yield return new WaitForSeconds(4.515f);
         var elapsed = 0f;
